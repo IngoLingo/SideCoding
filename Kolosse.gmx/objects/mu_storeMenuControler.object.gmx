@@ -505,7 +505,24 @@ switch (storeMenuState) {
         
         buyTotal -= moveV_Axis;
         buyTotal += moveH_Axis*10;
-        buyTotal = wrap(buyTotal, 0, 999);
+        
+        
+        switch (tab_selection) {
+            case 0:
+                var invintoryType = global.itemInventory;
+                var invintorySelection = bagItemsList;
+                break;
+            case 1:
+                var invintoryType = global.medicineInventory;
+                var invintorySelection = bagMedsList;
+                break;
+            case 2:
+                var invintoryType = global.captureInventory;
+                var invintorySelection = bagCaptsList;
+                break;
+        }
+        
+        buyTotal = wrap(buyTotal, 0, invintoryType[# 1, invintorySelection]);
         
         //Pressing Confirm Button
         if (key_press_A == 1) {          
@@ -526,15 +543,15 @@ switch (storeMenuState) {
         //Pressing Confirm Button
         if (key_press_A == 1) {   
             if tab_selection == 0 { 
-                //scr_gain_item(global.itemIndex[# global.itemStore[# 0, bagItemsList], itemStat.iid], buyTotal, global.itemInventory);
+                scr_gain_item(global.itemIndex[# global.itemInventory[# 0, bagItemsList], itemStat.iid], -buyTotal, global.itemInventory);
                 _projectManager.pm_monny += (global.itemIndex[# global.itemStore[# 0, bagItemsList], itemStat.price]*buyTotal)/2;
             }
             if tab_selection == 1 {
-                //scr_gain_item(global.medicineIndex[# global.medicineStore[# 0, bagMedsList], itemStat.iid], buyTotal, global.medicineInventory);
+                scr_gain_item(global.medicineIndex[# global.medicineInventory[# 0, bagMedsList], itemStat.iid], -buyTotal, global.medicineInventory);
                 _projectManager.pm_monny += (global.medicineIndex[# global.medicineStore[# 0, bagMedsList], itemStat.price]*buyTotal)/2;
             }
             if tab_selection == 2 {
-                //scr_gain_item(global.captureIndex[# global.captureStore[# 0, bagCaptsList], itemStat.iid], buyTotal, global.captureInventory);
+                scr_gain_item(global.captureIndex[# global.captureInventory[# 0, bagCaptsList], itemStat.iid], -buyTotal, global.captureInventory);
                 _projectManager.pm_monny += (global.captureIndex[# global.captureStore[# 0, bagCaptsList], itemStat.price]*buyTotal)/2;
             }
             

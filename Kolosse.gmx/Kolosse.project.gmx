@@ -49,6 +49,7 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
+    <script>scripts\TO_DO_NEXT.gml</script>
     <scripts name="inputdog">
       <scripts name="_Custom Controls">
         <script>scripts\inputdog_get_custom_controls_file.gml</script>
@@ -158,7 +159,6 @@
     <script>scripts\scr_drawStoreBorderAndControles.gml</script>
     <script>scripts\scr_draw_ShopListAndSelection.gml</script>
     <script>scripts\getItemStat.gml</script>
-    <script>scripts\TO_DO_NEXT.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_debug</font>
