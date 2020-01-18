@@ -1,0 +1,14 @@
+///scr_getStatsReffrenceVariables(number in party);
+iid = global.playerParty[# 0, argument0];
+name = global.playerParty[# 1, argument0];
+level = global.playerParty[# 2, argument0];
+species = global.kolosseIndex[# kolosseStat.speciesName, iid];
+damage = global.playerParty[# 4, argument0];
+energyUsed = global.playerParty[# 5, argument0];
+HvHp = global.playerParty[# 6, argument0];
+HvEp = global.playerParty[# 7, argument0];
+totalHP = floor((global.kolosseIndex[#  3, iid]*2+(HvHp/2))*(level/100)+ level + 10);
+totalEP = floor((global.kolosseIndex[#  4, iid]*2+(HvEp/2))*(level/100)+ level + 10);
+currentHP = totalHP - damage;
+currentEP = totalEP - energyUsed;
+status = global.playerParty[# 17, argument0];
