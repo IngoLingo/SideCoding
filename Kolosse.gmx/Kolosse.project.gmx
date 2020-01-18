@@ -158,6 +158,7 @@
     <script>scripts\scr_drawStoreBorderAndControles.gml</script>
     <script>scripts\scr_draw_ShopListAndSelection.gml</script>
     <script>scripts\getItemStat.gml</script>
+    <script>scripts\TO_DO_NEXT.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_debug</font>

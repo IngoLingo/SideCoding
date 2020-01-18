@@ -374,7 +374,7 @@ switch (storeMenuState) {
         if buttonDelay &gt; 0 {break;}
         buyTotal -= moveV_Axis;
         buyTotal += moveH_Axis*10;
-        buyTotal = wrap(buyTotal, 0, 999);
+        buyTotal = wrap(buyTotal, 1, 999);
         
         //Pressing Confirm Button
         if (key_press_A == 1) {          
@@ -488,6 +488,7 @@ switch (storeMenuState) {
                 storeMenuState = store_st.main;
             } else {
                 storeMenuState = store_st.sell_selling;
+                buyTotal = 1;
             }
             buttonDelay = delayNum;
         }
@@ -501,6 +502,10 @@ switch (storeMenuState) {
         
     case store_st.sell_selling:
         if buttonDelay &gt; 0 {break;}
+        
+        buyTotal -= moveV_Axis;
+        buyTotal += moveH_Axis*10;
+        buyTotal = wrap(buyTotal, 0, 999);
         
         //Pressing Confirm Button
         if (key_press_A == 1) {          
@@ -519,10 +524,21 @@ switch (storeMenuState) {
         if buttonDelay &gt; 0 {break;}
         
         //Pressing Confirm Button
-        if (key_press_A == 1) {     
-            //scr_lose_item(,,);
-            //add cost to money
-                   
+        if (key_press_A == 1) {   
+            if tab_selection == 0 { 
+                //scr_gain_item(global.itemIndex[# global.itemStore[# 0, bagItemsList], itemStat.iid], buyTotal, global.itemInventory);
+                _projectManager.pm_monny += (global.itemIndex[# global.itemStore[# 0, bagItemsList], itemStat.price]*buyTotal)/2;
+            }
+            if tab_selection == 1 {
+                //scr_gain_item(global.medicineIndex[# global.medicineStore[# 0, bagMedsList], itemStat.iid], buyTotal, global.medicineInventory);
+                _projectManager.pm_monny += (global.medicineIndex[# global.medicineStore[# 0, bagMedsList], itemStat.price]*buyTotal)/2;
+            }
+            if tab_selection == 2 {
+                //scr_gain_item(global.captureIndex[# global.captureStore[# 0, bagCaptsList], itemStat.iid], buyTotal, global.captureInventory);
+                _projectManager.pm_monny += (global.captureIndex[# global.captureStore[# 0, bagCaptsList], itemStat.price]*buyTotal)/2;
+            }
+            
+               
             storeMenuState = store_st.sell;
             buttonDelay = delayNum;
         }
@@ -876,15 +892,94 @@ switch (storeMenuState)
      
     // Selling States  
     case store_st.sell:
-        draw_text(display_get_gui_width()/2,display_get_gui_height()/2,"Sell");
+        //draw the item discription text
+        draw_set_color(c_menuBlack);
+        draw_set_halign(fa_left);
+        draw_set_valign(fa_top);
+        draw_set_font(fnt_ArialBlack12);
+        draw_text(24, sprite_get_height(spr_bagMenuMask)+120, string(getItemStat(itemStat.description)));
         break;
         
     case store_st.sell_selling:
-        draw_text(display_get_gui_width()/2,display_get_gui_height()/2,"Selling");
+        //draw the item info box
+        draw_set_font(fnt_ArialBlack16);
+        draw_set_color(c_menuGrayW2);
+        draw_rectangle(
+            12,
+            display_get_gui_height()*0.68,  
+            display_get_gui_width()-12, 
+            display_get_gui_height()*0.92,
+            false
+        );
+        
+        //draw the question text
+        draw_set_halign(fa_left);
+        draw_set_valign(fa_top);
+        draw_set_color(c_menuBlack);
+        draw_text(
+            24, 
+            display_get_gui_height()*0.7, 
+            "How many "+ string(getItemStat(itemStat.name)) +" do you want to sell?"
+        );
+        
+        
+        //draw the amount box
+        draw_set_color(c_menuGrayW2);
+        draw_rectangle(
+            display_get_gui_width()*0.55,
+            display_get_gui_height()*0.45,  
+            display_get_gui_width(), 
+            display_get_gui_height()*0.45+((string_height("I"))*3),
+            false
+        );
+        
+        draw_set_color(c_menuBlack);
+        draw_set_halign(fa_center);
+        draw_text(display_get_gui_width()*.65,display_get_gui_height()*.5, "x " + string(buyTotal));
+        
+        draw_set_halign(fa_right);
+        draw_text(display_get_gui_width()*.97,display_get_gui_height()*.47, "Cost:#$" + string(buyTotal * (getItemStat(itemStat.price)/2)));
         break;
         
     case store_st.sell_sure:
-        draw_text(display_get_gui_width()/2,display_get_gui_height()/2,"Sell sure");
+        //draw the item info box
+        draw_set_font(fnt_ArialBlack16);
+        draw_set_color(c_menuGrayW2);
+        draw_rectangle(
+            12,
+            display_get_gui_height()*0.68,  
+            display_get_gui_width()-12, 
+            display_get_gui_height()*0.92,
+            false
+        );
+        
+        //draw the question text
+        draw_set_halign(fa_left);
+        draw_set_valign(fa_top);
+        draw_set_color(c_menuBlack);
+        draw_text(
+            24, 
+            display_get_gui_height()*0.7, 
+            "Are you sure you want to sell "+ string(buyTotal) +"#"+ string(getItemStat(itemStat.name)) +", for $"+ string(buyTotal * (getItemStat(itemStat.price)/2)) +"?"
+        );
+        
+        
+        //draw the amount box
+        draw_set_color(c_menuGrayW2);
+        draw_rectangle(
+            display_get_gui_width()*0.55,
+            display_get_gui_height()*0.45,  
+            display_get_gui_width(), 
+            display_get_gui_height()*0.45+((string_height("I"))*3),
+            false
+        );
+        
+        draw_set_color(c_menuBlack);
+        draw_set_halign(fa_center);
+        draw_text(display_get_gui_width()*.65,display_get_gui_height()*.5, "x " + string(buyTotal));
+        
+        draw_set_halign(fa_right);
+        draw_text(display_get_gui_width()*.97,display_get_gui_height()*.47, "Cost:#$" + string(buyTotal * (getItemStat(itemStat.price)/2)));
         break;
 }
 
